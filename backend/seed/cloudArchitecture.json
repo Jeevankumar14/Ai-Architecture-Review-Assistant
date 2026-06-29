@@ -1,0 +1,167 @@
+[
+  {
+    "title": "AWS Well-Architected - Operational Excellence",
+    "category": "Cloud Architecture",
+    "subcategory": "AWS Well-Architected",
+    "description": "Focuses on running and monitoring systems to deliver business value and continually improving processes and procedures.",
+    "best_practices": ["Use infrastructure as code", "Make frequent small reversible changes", "Anticipate failure", "Learn from operational failures"],
+    "anti_patterns": ["Manual deployments", "No runbooks", "Ignoring operational metrics"],
+    "related_topics": ["CI/CD", "IaC", "Monitoring"],
+    "review_areas": ["Deployment Automation", "Monitoring", "Incident Response"],
+    "severity_if_missing": "High"
+  },
+  {
+    "title": "AWS Well-Architected - Security Pillar",
+    "category": "Cloud Architecture",
+    "subcategory": "AWS Well-Architected",
+    "description": "Encompasses protecting data, systems, and assets using cloud technologies. Covers identity management, detective controls, infrastructure protection, data protection.",
+    "best_practices": ["Implement strong identity foundation", "Enable traceability", "Apply security at all layers", "Automate security", "Protect data in transit and at rest"],
+    "anti_patterns": ["Hardcoded credentials", "Overly permissive IAM", "No encryption at rest", "Public S3 buckets"],
+    "related_topics": ["IAM", "Encryption", "VPC Security", "CloudTrail"],
+    "review_areas": ["Identity Management", "Data Protection", "Infrastructure Protection"],
+    "severity_if_missing": "Critical"
+  },
+  {
+    "title": "AWS Well-Architected - Reliability Pillar",
+    "category": "Cloud Architecture",
+    "subcategory": "AWS Well-Architected",
+    "description": "Ensures workloads perform their intended function correctly and consistently through foundations, change management, and failure management.",
+    "best_practices": ["Automatically recover from failure", "Test recovery procedures", "Scale horizontally", "Stop guessing capacity"],
+    "anti_patterns": ["Single points of failure", "No health checks", "No auto-scaling", "Untested DR"],
+    "related_topics": ["Auto Scaling", "Multi-AZ", "Disaster Recovery"],
+    "review_areas": ["Fault Tolerance", "Disaster Recovery", "Auto Scaling"],
+    "severity_if_missing": "Critical"
+  },
+  {
+    "title": "AWS Well-Architected - Performance Efficiency",
+    "category": "Cloud Architecture",
+    "subcategory": "AWS Well-Architected",
+    "description": "Focuses on efficient use of computing resources to meet requirements and maintain efficiency as demand changes.",
+    "best_practices": ["Select right resource types", "Use serverless where appropriate", "Use managed services", "Review and iterate"],
+    "anti_patterns": ["Over-provisioned resources", "Not using caching", "Wrong database type"],
+    "related_topics": ["Auto Scaling", "Caching", "CDN", "Serverless"],
+    "review_areas": ["Compute Optimization", "Storage Selection", "Database Selection"],
+    "severity_if_missing": "High"
+  },
+  {
+    "title": "AWS Well-Architected - Cost Optimization",
+    "category": "Cloud Architecture",
+    "subcategory": "AWS Well-Architected",
+    "description": "Focuses on avoiding unnecessary costs through understanding spending, selecting right-sized resources, and analyzing spending over time.",
+    "best_practices": ["Adopt consumption model", "Measure efficiency", "Use managed services", "Analyze expenditure"],
+    "anti_patterns": ["No cost monitoring", "Over-provisioned instances", "Not using reserved instances", "Unused resources"],
+    "related_topics": ["Reserved Instances", "Spot Instances", "Cost Explorer"],
+    "review_areas": ["Resource Right-Sizing", "Pricing Models", "Cost Monitoring"],
+    "severity_if_missing": "High"
+  },
+  {
+    "title": "High Availability Design",
+    "category": "Cloud Architecture",
+    "subcategory": "Resilience",
+    "description": "Ensures systems remain operational and accessible with redundancy, failover mechanisms, and eliminating single points of failure.",
+    "best_practices": ["Deploy across multiple AZs", "Use load balancers", "Implement health checks", "Design stateless tiers"],
+    "anti_patterns": ["Single AZ deployment", "No automated failover", "Single database instance"],
+    "related_topics": ["Multi-AZ", "Load Balancing", "Auto Scaling"],
+    "review_areas": ["Redundancy", "Failover", "Uptime SLAs"],
+    "severity_if_missing": "Critical"
+  },
+  {
+    "title": "Disaster Recovery Strategies",
+    "category": "Cloud Architecture",
+    "subcategory": "Resilience",
+    "description": "Defines how organizations recover from catastrophic failures. Four strategies: Backup & Restore, Pilot Light, Warm Standby, Multi-Site Active/Active.",
+    "best_practices": ["Define RTO and RPO", "Automate recovery", "Regularly test DR plans", "Use cross-region replication"],
+    "anti_patterns": ["No DR plan", "Untested backups", "Manual recovery", "Single-region for critical workloads"],
+    "related_topics": ["RTO", "RPO", "Cross-Region Replication"],
+    "review_areas": ["Recovery Time", "Data Durability", "Business Continuity"],
+    "severity_if_missing": "High"
+  },
+  {
+    "title": "Horizontal Scaling Patterns",
+    "category": "Cloud Architecture",
+    "subcategory": "Scalability",
+    "description": "Adds more instances to handle increased load. Provides better fault tolerance than vertical scaling and is preferred for cloud-native applications.",
+    "best_practices": ["Design stateless components", "Use auto-scaling groups", "Implement connection pooling", "Use distributed caching"],
+    "anti_patterns": ["Storing session state on servers", "Tight coupling", "Database as bottleneck"],
+    "related_topics": ["Auto Scaling", "Load Balancing", "Stateless Design"],
+    "review_areas": ["Scalability", "Performance Under Load"],
+    "severity_if_missing": "High"
+  },
+  {
+    "title": "Caching Strategies",
+    "category": "Cloud Architecture",
+    "subcategory": "Performance",
+    "description": "Stores frequently accessed data in fast-access layers. Patterns include cache-aside, write-through, write-behind. AWS services: ElastiCache, CloudFront.",
+    "best_practices": ["Use cache-aside for read-heavy workloads", "Set appropriate TTLs", "Implement cache invalidation", "Monitor cache hit ratios"],
+    "anti_patterns": ["Caching everything", "No invalidation strategy", "Cache stampede on expiration"],
+    "related_topics": ["Redis", "CDN", "ElastiCache"],
+    "review_areas": ["Latency", "Database Load", "Cost Efficiency"],
+    "severity_if_missing": "Medium"
+  },
+  {
+    "title": "Serverless Architecture",
+    "category": "Cloud Architecture",
+    "subcategory": "Compute",
+    "description": "Eliminates server management using Lambda, API Gateway, DynamoDB. Offers automatic scaling and pay-per-use but requires cold start and vendor lock-in consideration.",
+    "best_practices": ["Keep functions small and focused", "Use provisioned concurrency", "Implement dead letter queues", "Use Step Functions for workflows"],
+    "anti_patterns": ["Monolithic Lambda functions", "Synchronous Lambda chains", "No idempotency"],
+    "related_topics": ["Lambda", "API Gateway", "Step Functions", "EventBridge"],
+    "review_areas": ["Cost", "Scalability", "Cold Start Latency"],
+    "severity_if_missing": "Medium"
+  },
+  {
+    "title": "VPC Network Design",
+    "category": "Cloud Architecture",
+    "subcategory": "Networking",
+    "description": "Creating isolated network environments with proper subnet segmentation, security groups, NACLs, and connectivity options.",
+    "best_practices": ["Use multiple AZs with public/private subnets", "Implement least-privilege security groups", "Use VPC endpoints", "Enable VPC Flow Logs"],
+    "anti_patterns": ["Single subnet for all resources", "Overly permissive security groups", "No private subnets for databases"],
+    "related_topics": ["Subnets", "Security Groups", "NACLs", "VPC Endpoints"],
+    "review_areas": ["Network Security", "Segmentation"],
+    "severity_if_missing": "High"
+  },
+  {
+    "title": "Infrastructure as Code",
+    "category": "Cloud Architecture",
+    "subcategory": "DevOps",
+    "description": "Manages cloud resources through machine-readable configuration files. Tools include CloudFormation, Terraform, and CDK.",
+    "best_practices": ["Version control all infrastructure", "Use modular templates", "Implement drift detection", "Test changes in staging"],
+    "anti_patterns": ["Manual console changes", "No version control", "Hardcoded values"],
+    "related_topics": ["CloudFormation", "Terraform", "CDK"],
+    "review_areas": ["Repeatability", "Version Control", "Environment Parity"],
+    "severity_if_missing": "High"
+  },
+  {
+    "title": "Multi-Region Architecture",
+    "category": "Cloud Architecture",
+    "subcategory": "Global",
+    "description": "Deploys applications across AWS regions for low latency, DR, and data residency. Involves data replication, traffic routing, and conflict resolution.",
+    "best_practices": ["Use Route 53 for DNS routing", "Implement data replication with conflict resolution", "Use Global Accelerator"],
+    "anti_patterns": ["Synchronous cross-region calls", "No conflict resolution", "Inconsistent deployments"],
+    "related_topics": ["Route 53", "DynamoDB Global Tables", "Aurora Global Database"],
+    "review_areas": ["Global Availability", "Data Consistency", "Latency"],
+    "severity_if_missing": "Medium"
+  },
+  {
+    "title": "Event-Driven Cloud Architecture",
+    "category": "Cloud Architecture",
+    "subcategory": "Integration",
+    "description": "Uses EventBridge, SNS, SQS, Kinesis to decouple components and process events asynchronously for improved scalability and resilience.",
+    "best_practices": ["Use EventBridge for event routing", "Implement dead letter queues", "Design idempotent handlers", "Use SQS for buffering"],
+    "anti_patterns": ["No dead letter queues", "Missing idempotency", "Tight coupling via direct API calls"],
+    "related_topics": ["EventBridge", "SQS", "SNS", "Kinesis"],
+    "review_areas": ["Decoupling", "Reliability", "Scalability"],
+    "severity_if_missing": "Medium"
+  },
+  {
+    "title": "Container Orchestration on AWS",
+    "category": "Cloud Architecture",
+    "subcategory": "Compute",
+    "description": "Using ECS or EKS to deploy, manage, and scale containerized applications. Fargate provides serverless container execution.",
+    "best_practices": ["Use Fargate for simplified operations", "Implement resource limits", "Use ECR for images", "Enable container insights"],
+    "anti_patterns": ["No resource limits", "No image scanning", "Using latest tag in production"],
+    "related_topics": ["ECS", "EKS", "Fargate", "Docker", "ECR"],
+    "review_areas": ["Container Security", "Resource Management"],
+    "severity_if_missing": "Medium"
+  }
+]

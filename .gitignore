@@ -1,0 +1,27 @@
+# Root ignore
+node_modules/
+.env
+.env.*.local
+.DS_Store
+*.log
+coverage/
+.vscode/
+
+# Backend specific
+backend/node_modules/
+backend/.env
+backend/uploads/
+backend/coverage/
+
+# Frontend specific
+frontend/node_modules/
+frontend/.env
+frontend/dist/
+frontend/build/
+frontend/coverage/
+
+# AI and Temp specific
+.agents/
+.gemini/
+*.pem
+tempmediaStorage/
