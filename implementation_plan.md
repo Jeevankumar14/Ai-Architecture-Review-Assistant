@@ -6,7 +6,7 @@ A production-grade SaaS platform that accepts architecture documents, automatica
 
 ---
 
-## User Review Required
+
 
 > [!IMPORTANT]
 > **Gemini Credentials**: You must have an active Google Gemini API Key for Gemini 2.5 Flash (used for OCR, Metadata, and Architecture Review).
@@ -375,8 +375,10 @@ Orchestrates the full automated review pipeline:
 7. Maintainability Analysis
 8. Cost Analysis
 9. Rule Engine (Execute deterministic checks)
-10. Groq DeepSeek R1 (Generate holistic review & explain deterministic findings)
+10. Gemini 2.5 Flash(Generate holistic review & explain deterministic findings)
 11. Final Report (Combine and format findings)
+12.chat assistant - groq llama 3.3
+
 
 ##### [NEW] backend/src/services/scoringEngine.js
 - Parse findings from review and rule engine results
@@ -602,7 +604,7 @@ flowchart TD
     H --> I["MongoDB Atlas Vector Search"]
     I --> J["Hybrid Retrieval"]
     J --> K["Rule Engine"]
-    K --> L["Groq DeepSeek R1"]
+    K --> L["Gemini 2.5 Flash"]
     L --> M["Review"]
     M --> N["Chat Session"]
     N --> O["Groq Llama 3.3"]
