@@ -9,7 +9,8 @@ A production-grade SaaS platform that accepts architecture documents, automatica
 ## User Review Required
 
 > [!IMPORTANT]
-> **Groq Credentials**: You must have an active Groq API Key to access DeepSeek R1, Llama 3.3 70B, and Qwen 3 32B.
+> **Gemini Credentials**: You must have an active Google Gemini API Key for Gemini 2.5 Flash (used for OCR, Metadata, and Architecture Review).
+> **Groq Credentials**: You must have an active Groq API Key to access Llama 3.3 (used for low-latency Chat).
 > **AWS Credentials**: You must have an active AWS account for Amazon S3 storage in your chosen region (default: `us-east-1`).
 > **MongoDB Atlas**: You need a MongoDB Atlas cluster (M10+ recommended for Vector Search). Free tier (M0) supports limited Vector Search.
 
@@ -98,6 +99,7 @@ Dependencies: `express`, `mongoose`, `dotenv`, `cors`, `helmet`, `morgan`, `expr
 
 ##### [NEW] backend/.env.example
 ```env
+GEMINI_API_KEY=
 GROQ_API_KEY=
 AWS_ACCESS_KEY=
 AWS_SECRET_KEY=
@@ -179,13 +181,16 @@ Initialize with `npx create-vite@latest ./ --template react` then add TailwindCS
 ```js
 {
   projectId (ref), userId (ref),
-  scores: { overall, security, scalability, performance, cost, maintainability },
+  scores: { totalArchitectureScore, security, scalability, performance, cost, maintainability },
   executiveSummary,
-  findings: [{ issue, severity, explanation, recommendation, category }],
-  deterministicFindings: [{ rule, status, explanation }],
+  keyInsights: {
+    critical: [{ issue, explanation, recommendation, category }], // e.g., missing rate limit
+    high: [{ issue, explanation, recommendation, category }],
+    low: [{ issue, explanation, recommendation, category }]
+  },
   recommendations: [String],
-  suggestedQuestions: [String],
-  status, generatedBy: "groq-deepseek-r1", generatedAt
+  pdfReportUrl: String, // URL to the downloadable PDF report
+  status, generatedBy: "gemini-2.5-flash", generatedAt
 }
 ```
 
@@ -325,21 +330,20 @@ Intelligent chunking strategy:
 - Simplifies RAG by querying a single collection with a filter: `{ $or: [{type: "document"}, {type: "knowledge"}] }`
 - Similarity: cosine, numCandidates: 150, limit: 10
 
-#### AI Services (Groq Stack)
+#### AI Services (Gemini & Groq Stack)
 
-##### [NEW] backend/src/services/groq/groqClient.js
-Central Groq SDK initialization, error handling, and exponential backoff retry logic.
+##### [NEW] backend/src/services/aiClient.js
+Central initialization for both Google Gemini SDK and Groq SDK.
 
-##### [NEW] backend/src/services/groq/reviewService.js
-Dedicated service for Architecture Review generation using Groq DeepSeek R1.
+##### [NEW] backend/src/services/reviewService.js
+Dedicated service for Architecture Review, OCR, and Metadata extraction using Gemini 2.5 Flash.
 - `generateArchitectureReview()`
+- `extractMetadata()`
+- `processOCR()`
 
-##### [NEW] backend/src/services/groq/chatService.js
-Dedicated service for Chat interactions using Groq Llama 3.3 70B to orchestrate fast, conversational queries.
+##### [NEW] backend/src/services/chatService.js
+Dedicated service for Chat interactions using Groq Llama 3.3 to orchestrate fast, conversational queries.
 - `chatResponse()`
-
-##### [NEW] backend/src/services/groq/extractionService.js
-Dedicated service for structured extraction tasks using Qwen 3 32B (Groq). Used alongside `metadataExtractor` and `architectureParser` if LLM-driven structured extraction is needed.
 
 ##### [NEW] backend/src/services/ragService.js
 RAG retrieval logic used by both Review Engine and Chat Engine:
@@ -477,16 +481,16 @@ Grid of clickable suggestion cards shown before first message or after review
 #### Review Components
 
 ##### [NEW] frontend/src/components/review/ScoreCard.jsx
-Architecture score card with animated circular progress indicators for each category (overall, security, scalability, performance, cost, maintainability). Color-coded: green (75+), yellow (50-74), red (<50).
+Architecture score card with animated circular progress indicators for each category (total architecture score, security, scalability, performance, cost, maintainability). Color-coded: green (75+), yellow (50-74), red (<50).
 
-##### [NEW] frontend/src/components/review/IssueCard.jsx
-Finding card with severity badge (Critical=red, High=orange, Medium=yellow, Low=blue), issue title, explanation accordion, recommendation section. Indicates if finding was deterministic (Rule Engine) vs. LLM heuristic.
+##### [NEW] frontend/src/components/review/InsightCard.jsx
+Key insight card separated by criticality (Critical=red, High=orange, Low=blue). Displays issue title, explanation, and clear recommendations (e.g. Critical: Rate Limiting Missing).
 
 ##### [NEW] frontend/src/components/review/ExecutiveSummary.jsx
-Formatted summary with expandable sections
+Formatted summary with expandable sections and high-level architectural overview.
 
 ##### [NEW] frontend/src/components/review/ReviewReport.jsx
-Composite component that renders the full initial review: ScoreCard → ExecutiveSummary → Findings list → Risks → Recommendations → SuggestionCards
+Composite component that renders the full initial review: ScoreCard → ExecutiveSummary → Key Insights (Critical/High/Low) → Recommendations. Includes a prominent "Download as PDF" button for users to export the report.
 
 #### Upload Components
 
@@ -577,10 +581,10 @@ Express-validator schemas for all routes
 |---|---|---|
 | Upload method | Multer + multer-s3 | Enables immediate server-side processing after upload |
 | Embedding model | BAAI BGE Large v1.5 | High-quality open-source text embeddings, fast generation |
-| Review LLM | Groq DeepSeek R1 | Superior complex reasoning and deep architecture analysis |
-| Chat LLM | Groq Llama 3.3 70B | Lightning-fast inference speeds suitable for real-time RAG chat |
+| Review & OCR LLM | Gemini 2.5 Flash | Superior multimodal capabilities for OCR, metadata, and deep architecture review |
+| Chat LLM | Groq Llama 3.3 | Lightning-fast inference speeds suitable for real-time conversational chat |
 | Vector DB | MongoDB Atlas Vector Search | Single database for both app data and vectors (Hybrid Retrieval) |
-| Architecture Parsing | Qwen 3 32B (Groq) | High speed structured metadata and architecture logic extraction |
+| Report Export | PDF Generation | Allows users to download the comprehensive review scores and insights |
 | Frontend framework | Vite + React | Fast dev experience, modern tooling |
 | Styling | TailwindCSS + shadcn/ui | Rapid UI development with professional components |
 
