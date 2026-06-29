@@ -43,7 +43,44 @@ ArchReview AI is a modern, AI-powered software architecture review assistant. It
    ```bash
    cd backend
    npm install
-   # Create a .env file based on environment requirements
+   ```
+   Create a `.env` file in the `backend` directory using this template:
+   ```env
+   # PORT=5000
+   NODE_ENV=development
+   CLIENT_URL=http://localhost:5174
+
+   # ─── MongoDB ────────────────────────────────────────────────────────
+   # Note: MongoDB Atlas Vector Search is required for the knowledge base
+   MONGODB_URI=
+
+   # ─── AI Providers (OpenRouter & Gemini) ──────────────────────────────
+   GEMINI_API_KEY=
+   GROQ_API_KEY=
+
+   # ─── AWS S3 (Document Uploads) ──────────────────────────────────────
+   AWS_REGION=ap-south-2
+   AWS_ACCESS_KEY_ID=
+   AWS_SECRET_ACCESS_KEY=
+
+   S3_BUCKET_NAME=
+   S3_UPLOAD_PREFIX=uploads
+
+   # ─── Authentication ──────────────────────────────────────────────────
+   JWT_SECRET=
+   JWT_EXPIRES_IN=1h
+   JWT_REFRESH_EXPIRES_IN=7d
+   JWT_REMEMBER_ME_EXPIRES_IN=30d
+
+   # ─── Email (Password Reset) ──────────────────────────────────────────
+   SMTP_HOST=smtp.gmail.com
+   SMTP_PORT=587
+   SMTP_USER=
+   SMTP_PASS=
+   EMAIL_FROM=
+   ```
+   Then start the server:
+   ```bash
    npm start
    ```
 
