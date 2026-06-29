@@ -54,7 +54,7 @@ ArchReview AI is a modern, AI-powered software architecture review assistant. It
    # Note: MongoDB Atlas Vector Search is required for the knowledge base
    MONGODB_URI=
 
-   # ─── AI Providers (OpenRouter & Gemini) ──────────────────────────────
+   # ─── AI Providers (Groq & Gemini) ──────────────────────────────
    GEMINI_API_KEY=
    GROQ_API_KEY=
 
