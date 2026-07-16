@@ -44,7 +44,7 @@ const FooterSection = () => {
           <div className="md:col-span-2 md:col-start-7">
             <h4 className="text-white font-bold text-sm mb-6 uppercase tracking-wider">Links</h4>
             <ul className="space-y-4">
-              {['Services', 'Process', 'Case studies', 'Benefits', 'Pricing'].map((item) => (
+              {['Services', 'Process', 'Case studies', 'Benefits'].map((item) => (
                 <li key={item}>
                   <a href="#" className="text-white/50 hover:text-white transition-colors text-sm font-medium">
                     {item}

@@ -22,7 +22,7 @@ const generateEdgePosition = () => {
   }
 };
 
-const PARTICLE_COUNT = 45;
+const PARTICLE_COUNT = 55;
 
 const createParticles = () =>
   Array.from({ length: PARTICLE_COUNT }, (_, i) => {
@@ -101,7 +101,7 @@ const HeroSection = () => {
       </div>
 
       {/* ── Central glowing architecture diagram (SVG shape) ── */}
-      <div className="absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-[1] w-[350px] h-[350px] md:w-[600px] md:h-[600px] flex items-center justify-center" aria-hidden="true">
+      <div className="absolute top-[35%] left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-[1] w-[350px] h-[350px] md:w-[600px] md:h-[600px] flex items-center justify-center" aria-hidden="true">
         {/* Ambient glow behind the diagram */}
         <motion.div
           className="absolute inset-0 bg-purple-600/15 blur-[60px] md:blur-[100px] rounded-full"
@@ -164,7 +164,7 @@ const HeroSection = () => {
 
       {/* ── Content ── */}
       <motion.div
-        className="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto"
+        className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center max-w-3xl mx-auto px-4 sm:px-6 -translate-y-4 sm:-translate-y-8 md:-translate-y-12"
         variants={container}
         initial="hidden"
         animate="show"
@@ -172,7 +172,7 @@ const HeroSection = () => {
         {/* Pill badge */}
         <motion.div
           variants={fadeUp}
-          className="flex items-center gap-2 bg-[#111111] border border-white/10 rounded-full px-3 py-1.5 mb-8"
+          className="flex items-center gap-2 bg-[#111111] border border-white/10 rounded-full px-3 py-1.5 mb-6"
         >
           <span className="bg-purple-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
             New
@@ -186,28 +186,28 @@ const HeroSection = () => {
         {/* Headline */}
         <motion.h1
           variants={fadeUp}
-          className="text-5xl md:text-7xl font-bold text-white leading-[1.1] mb-6 tracking-tight drop-shadow-xl"
+          className="text-4xl sm:text-5xl md:text-7xl font-bold text-white leading-[1.05] mb-5 tracking-tight drop-shadow-xl max-w-[92vw] sm:max-w-none"
         >
-          Intelligent Architecture{' '}
+          <span className="whitespace-nowrap">Intelligent Architecture</span>{' '}
           <br className="hidden md:block" />
           Review for Modern{' '}
           <br className="hidden md:block" />
-          Engineering.
+          Engineering Teams.
         </motion.h1>
 
         {/* Subtext */}
         <motion.p
           variants={fadeUp}
-          className="text-lg md:text-xl text-white/80 max-w-2xl mb-10 drop-shadow-md"
+          className="text-base md:text-xl text-white/80 max-w-2xl mb-8 drop-shadow-md"
         >
-          ArchReview brings AI architecture validation to your fingertips to catch
-          vulnerabilities, ensure compliance, and scale with confidence.
+          ArchReview validates architecture decisions, surfaces risk early, and
+          helps teams ship with more confidence.
         </motion.p>
 
         {/* Buttons */}
         <motion.div
           variants={fadeUp}
-          className="flex flex-col sm:flex-row items-center gap-4"
+          className="flex flex-col sm:flex-row items-center gap-4 w-full justify-center"
         >
           <button onClick={() => navigate('/register')} className="w-full sm:w-auto bg-purple-600 hover:bg-purple-700 text-white px-8 py-3.5 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20">
             Get started <ArrowRight className="w-4 h-4" />

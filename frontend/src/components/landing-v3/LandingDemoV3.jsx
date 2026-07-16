@@ -5,7 +5,6 @@ import LogoWall from './LogoWall';
 import ServicesBento from './ServicesBento';
 import ProcessFlow from './ProcessFlow';
 import BenefitsGrid from './BenefitsGrid';
-import PricingSection from './PricingSection';
 import Testimonials from './Testimonials';
 import FAQSection from './FAQSection';
 import FinalCTA from './FinalCTA';
@@ -18,9 +17,10 @@ const LandingDemoV3 = () => {
       <HeroSection />
       <LogoWall />
       <ServicesBento />
-      <ProcessFlow />
+      <section id="how-it-works">
+        <ProcessFlow />
+      </section>
       <BenefitsGrid />
-      <PricingSection />
       <Testimonials />
       <FAQSection />
       <FinalCTA />
