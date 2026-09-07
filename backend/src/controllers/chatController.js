@@ -100,7 +100,7 @@ export const sendMessage = async (req, res, next) => {
     // Get AI response (non-streaming for simplicity)
     const startTime = Date.now();
     let responseContent = '';
-    const stream = chatService.chatResponse(conversationHistory, systemPrompt, 300);
+    const stream = chatService.chatResponse(conversationHistory, systemPrompt, 2048);
     for await (const chunk of stream) {
       responseContent += chunk;
     }

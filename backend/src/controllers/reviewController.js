@@ -39,9 +39,13 @@ export const getLatestReview = async (req, res, next) => {
   try {
     const review = await Review.findOne({ projectId: req.params.projectId })
       .sort({ generatedAt: -1 });
-    if (!review) {
-      return res.status(404).json({ success: false, error: 'No reviews found for this project' });
-    }
+      if (!review) {
+        // No review yet for this project – indicate that generation is in progress
+        return res.status(200).json({
+          success: true,
+          data: { review: null, message: 'Review generation in progress. Please check back shortly.' },
+        });
+      }
     res.status(200).json({ success: true, data: { review } });
   } catch (error) {
     next(error);

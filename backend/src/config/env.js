@@ -6,7 +6,6 @@ const required = [
   'JWT_SECRET',
   'AWS_REGION',
   'S3_BUCKET_NAME',
-  'OPENROUTER_API_KEY',
   'GEMINI_API_KEY',
 ];
 
@@ -51,10 +50,9 @@ const env = {
   bedrockTitanDimensions: parseInt(process.env.BEDROCK_TITAN_DIMENSIONS, 10) || 1024,
 
   // AI Providers
-  openRouterApiKey: process.env.OPENROUTER_API_KEY,
   geminiApiKey: process.env.GEMINI_API_KEY,
   groqApiKey: process.env.GROQ_API_KEY,
-  chatModel: process.env.CHAT_MODEL || 'llama-3.1-8b-instant',
+  chatModel: process.env.CHAT_MODEL || 'openai/gpt-oss-120b',
   extractionModel: process.env.EXTRACTION_MODEL || 'qwen/qwen3-next-80b-a3b-instruct:free',
   architectureReviewModel: process.env.ARCH_REVIEW_MODEL || 'gemini-2.5-flash',
 

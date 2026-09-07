@@ -2,21 +2,7 @@ import OpenAI from 'openai';
 import { GoogleGenAI } from '@google/genai';
 import env from '../../config/env.js';
 
-let openRouterClient = null;
 let geminiClient = null;
-
-export const getOpenRouterClient = () => {
-  if (!openRouterClient) {
-    if (!env.openRouterApiKey) {
-      throw new Error('OPENROUTER_API_KEY is not defined in the environment variables.');
-    }
-    openRouterClient = new OpenAI({
-      baseURL: 'https://openrouter.ai/api/v1',
-      apiKey: env.openRouterApiKey,
-    });
-  }
-  return openRouterClient;
-};
 
 export const getGeminiClient = () => {
   if (!geminiClient) {

@@ -1,9 +1,15 @@
 import Document from '../models/Document.js';
+import Project from '../models/Project.js';
 import pipelineOrchestrator from '../services/pipelineOrchestrator.js';
 import path from 'path';
 
 export const uploadDocuments = async (req, res, next) => {
   try {
+    const project = await Project.findOne({ _id: req.params.projectId, userId: req.user._id }).lean();
+    if (!project) {
+      return res.status(404).json({ success: false, error: 'Project not found' });
+    }
+
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ success: false, error: 'No files uploaded' });
     }
@@ -32,7 +38,14 @@ export const uploadDocuments = async (req, res, next) => {
     const documentIds = documents.map((d) => d._id);
     pipelineOrchestrator
       .processDocuments(projectId, req.user._id, documentIds)
-      .catch((err) => console.error('Pipeline error:', err.message));
+      .catch(async (err) => {
+        console.error('Pipeline error:', err.message);
+        // Mark all stuck documents as failed so frontend polling can stop
+        await Document.updateMany(
+          { _id: { $in: documentIds }, status: 'processing' },
+          { status: 'failed', processingError: err.message }
+        ).catch(() => {});
+      });
 
     res.status(201).json({
       success: true,
@@ -49,7 +62,12 @@ export const uploadDocuments = async (req, res, next) => {
 
 export const listDocuments = async (req, res, next) => {
   try {
-    const documents = await Document.find({ projectId: req.params.projectId })
+    const project = await Project.findOne({ _id: req.params.projectId, userId: req.user._id }).lean();
+    if (!project) {
+      return res.status(404).json({ success: false, error: 'Project not found' });
+    }
+
+    const documents = await Document.find({ projectId: req.params.projectId, userId: req.user._id })
       .sort({ createdAt: -1 })
       .lean();
     res.status(200).json({ success: true, data: { documents } });
@@ -72,7 +90,12 @@ export const getDocument = async (req, res, next) => {
 
 export const getProcessingStatus = async (req, res, next) => {
   try {
-    const documents = await Document.find({ projectId: req.params.projectId })
+    const project = await Project.findOne({ _id: req.params.projectId, userId: req.user._id }).lean();
+    if (!project) {
+      return res.status(404).json({ success: false, error: 'Project not found' });
+    }
+
+    const documents = await Document.find({ projectId: req.params.projectId, userId: req.user._id })
       .select('fileName status processingError chunkCount')
       .lean();
 

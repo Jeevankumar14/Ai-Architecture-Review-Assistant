@@ -65,7 +65,8 @@ class DocumentProcessor {
 
   async _extractDocx(buffer) {
     try {
-      const text = await officeparser.parseOfficeAsync(buffer);
+      const ast = await officeparser.parseOffice(buffer);
+      const text = ast.toText();
       return this._cleanText(text);
     } catch (error) {
       logger.error('DOCX extraction failed', { error: error.message });
