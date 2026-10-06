@@ -77,45 +77,54 @@ By decoupling **Immediate Review Generation (< 5-7s Fast Path)** from **Heavy Ba
 
 ```mermaid
 flowchart TB
-    subgraph UI ["Client Tier (React 19 + Vite)"]
+    subgraph UI ["Client Tier: React 19 + Vite"]
         Dashboard["Project Dashboard & Radar Charts"]
         ChatUI["Conversational Architecture Advisor"]
     end
 
     subgraph Ingestion ["Ingestion & Deduplication"]
-        Upload["Multer-S3 (AWS S3)"]
+        Upload["Multer-S3: AWS S3"]
         Hash["SHA-256 Content Hasher"]
-        CacheCheck{Redis / DB Cache?}
+        CacheCheck{Cache Hit?}
     end
 
-    subgraph FastPath ["Fast Review Path (< 5-7s)"]
-        Parser["Doc & Vision Parser (PDF / DOCX / OCR)"]
-        Extractor["Deterministic Architecture Extractor (< 25ms)"]
+    subgraph FastPath ["Fast Review Path: Sub-7s"]
+        Parser["Doc & Vision Parser: PDF / DOCX / OCR"]
+        Extractor["Deterministic Architecture Extractor"]
         Normalizer["Canonical Architecture Normalizer"]
-        Rules["Deterministic Rule Engine (6 Checks)"]
-        KB["Hybrid KB Search (Vector + BM25)"]
-        Gemini["Gemini 2.5 Flash Reasoning (temp: 0.0)"]
+        Rules["Deterministic Rule Engine: 6 Checks"]
+        KB["Hybrid KB Search: Vector + BM25"]
+        Gemini["Gemini 2.5 Flash Reasoning"]
         Scorer["5-Pillar Scoring Engine"]
     end
 
-    subgraph WorkerTier ["Isolated Background Worker (worker.js)"]
+    subgraph WorkerTier ["Isolated Background Worker: worker.js"]
         Queue["BullMQ / Redis Job Queue"]
         Chunker["Semantic Document Chunker"]
-        Cohere["Cohere Cloud API (embed-v4.0, 1024-dim)"]
+        Cohere["Cohere Cloud API: embed-v4.0 1024-dim"]
         Atlas["MongoDB Atlas Vector Store"]
     end
 
-    UI --> Upload --> Hash --> CacheCheck
-    CacheCheck -- "Cache Hit (< 0.5s)" --> Dashboard
-    CacheCheck -- "Fresh Upload" --> Parser
-    Parser --> Extractor --> Normalizer
-    Normalizer --> Rules & KB
-    Rules & KB --> Gemini --> Scorer --> Dashboard
+    UI --> Upload
+    Upload --> Hash
+    Hash --> CacheCheck
+    CacheCheck -->|Instant Cached Review| Dashboard
+    CacheCheck -->|Fresh Document| Parser
+    Parser --> Extractor
+    Extractor --> Normalizer
+    Normalizer --> Rules
+    Normalizer --> KB
+    Rules --> Gemini
+    KB --> Gemini
+    Gemini --> Scorer
+    Scorer --> Dashboard
 
     Parser -.->|Enqueue Non-Blocking Job| Queue
-    Queue --> Chunker --> Cohere --> Atlas
+    Queue --> Chunker
+    Chunker --> Cohere
+    Cohere --> Atlas
 
-    ChatUI -->|Dual Retrieval (Project Chunks + KB)| Atlas
+    ChatUI -->|Dual Retrieval: Chunks + KB| Atlas
     Atlas --> ChatUI
 ```
 
