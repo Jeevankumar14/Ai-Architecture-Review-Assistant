@@ -73,10 +73,10 @@ export default function Sidebar({ isOpen, setIsOpen }) {
 
   const fetchProjects = async () => {
     try {
-      const { data } = await api.get('/projects');
-      setProjects(data.data.projects.slice(0, 5)); // Show top 5 projects
+      const { data } = await api.get('/projects?limit=100');
+      setProjects(data.data?.projects || []);
     } catch (e) {
-      console.error(e);
+      console.error('Failed to load projects for sidebar', e);
     }
   };
 
@@ -108,60 +108,65 @@ export default function Sidebar({ isOpen, setIsOpen }) {
 
   return (
     <aside 
-      className={`fixed top-0 left-0 z-40 h-screen bg-white border-r border-slate-200/80 transition-all duration-300 flex flex-col justify-between shrink-0 ${
+      className={`fixed top-0 left-0 z-40 h-screen bg-white border-r border-slate-200/80 transition-all duration-300 flex flex-col shrink-0 ${
         isOpen ? 'w-64' : 'w-20'
       }`}
     >
       {/* Top Header */}
-      <div>
-        <div className="flex h-16 items-center justify-between px-4 border-b border-slate-100 relative">
-          <Link to="/dashboard" className="flex items-center gap-2">
-            <div className="shrink-0 flex items-center justify-center -ml-4 -my-4 relative z-10">
-              <img src="/archreviewlogo.png" alt="ArchReview Logo" className="h-20 w-20 object-contain scale-110" />
-            </div>
-            {isOpen && (
-              <span className="font-extrabold text-sm tracking-tight bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent truncate animate-in fade-in duration-300">
-                ArchReview
-              </span>
-            )}
-          </Link>
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            onClick={() => setIsOpen(!isOpen)}
-            className="h-8 w-8 rounded-lg text-slate-400 hover:text-slate-600"
-          >
-            {isOpen ? <ChevronLeft className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
-          </Button>
-        </div>
+      <div className="flex h-16 items-center justify-between px-4 border-b border-slate-100 relative shrink-0">
+        <Link to="/dashboard" className="flex items-center gap-2">
+          <div className="shrink-0 flex items-center justify-center -ml-4 -my-4 relative z-10">
+            <img src="/archreviewlogo.png" alt="ArchReview Logo" className="h-20 w-20 object-contain scale-110" />
+          </div>
+          {isOpen && (
+            <span className="font-extrabold text-sm tracking-tight bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent truncate animate-in fade-in duration-300">
+              ArchReview
+            </span>
+          )}
+        </Link>
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          onClick={() => setIsOpen(!isOpen)}
+          className="h-8 w-8 rounded-lg text-slate-400 hover:text-slate-600"
+        >
+          {isOpen ? <ChevronLeft className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+        </Button>
+      </div>
 
-        {/* Navigation Links */}
-        <nav className="p-4 space-y-1.5">
-          {menuItems.map((item) => {
-            const isActive = location.pathname === item.path;
-            const Icon = item.icon;
-            return (
-              <Link
-                key={item.title}
-                to={item.path}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 ${
-                  isActive 
-                    ? 'bg-primary/5 text-primary border-l-4 border-primary' 
-                    : 'text-slate-500 hover:bg-slate-50 hover:text-slate-800'
-                }`}
-              >
-                <Icon className={`h-4 w-4 shrink-0 ${isActive ? 'text-primary' : 'text-slate-400'}`} />
-                {isOpen && <span className="truncate">{item.title}</span>}
-              </Link>
-            );
-          })}
-        </nav>
+      {/* Navigation Links */}
+      <nav className="p-4 space-y-1.5 shrink-0">
+        {menuItems.map((item) => {
+          const isActive = location.pathname === item.path;
+          const Icon = item.icon;
+          return (
+            <Link
+              key={item.title}
+              to={item.path}
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 ${
+                isActive 
+                  ? 'bg-primary/5 text-primary border-l-4 border-primary' 
+                  : 'text-slate-500 hover:bg-slate-50 hover:text-slate-800'
+              }`}
+            >
+              <Icon className={`h-4 w-4 shrink-0 ${isActive ? 'text-primary' : 'text-slate-400'}`} />
+              {isOpen && <span className="truncate">{item.title}</span>}
+            </Link>
+          );
+        })}
+      </nav>
 
-        {/* Recent Projects Section (Only if open) */}
-        {isOpen && projects.length > 0 && (
-          <div className="px-6 py-2 space-y-2 animate-in fade-in duration-300">
-            <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Recent Reviews</h4>
-            <div className="space-y-1">
+      {/* Recent Projects Section (Scrollable, full list) */}
+      {isOpen && (
+        <div className="flex-1 min-h-0 flex flex-col px-4 py-2 border-t border-slate-100 overflow-hidden animate-in fade-in duration-300">
+          <div className="flex items-center justify-between px-2 mb-2 shrink-0">
+            <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+              Recent Reviews {projects.length > 0 && `(${projects.length})`}
+            </h4>
+          </div>
+          
+          {projects.length > 0 ? (
+            <div className="flex-1 overflow-y-auto pr-1 space-y-1 custom-scrollbar">
               {sortedProjects.map((p) => {
                 const isActive = location.pathname.includes(p._id);
                 const isPinned = pinnedIds.includes(p._id);
@@ -170,8 +175,9 @@ export default function Sidebar({ isOpen, setIsOpen }) {
                     <Link
                       to={`/projects/${p._id}`}
                       className={`flex items-center gap-2 text-[11px] font-semibold flex-1 truncate ${
-                        isActive ? 'text-primary' : 'text-slate-500 hover:text-slate-800'
+                        isActive ? 'text-primary font-bold' : 'text-slate-500 hover:text-slate-800'
                       }`}
+                      title={p.name}
                     >
                       {isPinned ? (
                         <Pin className="h-3.5 w-3.5 shrink-0 text-amber-500 fill-amber-500/20" />
@@ -213,12 +219,14 @@ export default function Sidebar({ isOpen, setIsOpen }) {
                 );
               })}
             </div>
-          </div>
-        )}
-      </div>
+          ) : (
+            <p className="text-[11px] text-slate-400 italic px-2 py-2">No reviews yet</p>
+          )}
+        </div>
+      )}
 
       {/* User Profile & Actions Footer */}
-      <div className="p-4 border-t border-slate-100 bg-slate-50/50">
+      <div className="p-4 border-t border-slate-100 bg-slate-50/50 shrink-0 mt-auto">
         <div className="flex items-center justify-between gap-3 overflow-hidden">
           <div className="flex items-center gap-2 overflow-hidden">
             <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20 shrink-0">

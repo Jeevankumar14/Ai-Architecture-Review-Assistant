@@ -1,28 +1,40 @@
 import mongoose from 'mongoose';
 import env from './env.js';
 
-const connectDatabase = async () => {
-  try {
-    const conn = await mongoose.connect(env.mongoUri, {
-      maxPoolSize: 10,
-      serverSelectionTimeoutMS: 5000,
-      socketTimeoutMS: 45000,
-    });
+const connectWithUri = async (uri) => mongoose.connect(uri, {
+  maxPoolSize: 10,
+  serverSelectionTimeoutMS: 30000,
+  socketTimeoutMS: 45000,
+});
 
-    console.log(`✅ MongoDB connected: ${conn.connection.host}`);
+const connectDatabase = async (maxRetries = 5, retryDelayMs = 3000) => {
+  let attempts = 0;
 
-    mongoose.connection.on('error', (err) => {
-      console.error('❌ MongoDB connection error:', err);
-    });
+  while (attempts < maxRetries) {
+    try {
+      attempts++;
+      const conn = await connectWithUri(env.mongoUri);
 
-    mongoose.connection.on('disconnected', () => {
-      console.warn('⚠️  MongoDB disconnected. Attempting reconnect...');
-    });
+      console.log(`✅ MongoDB connected: ${conn.connection.host}`);
 
-    return conn;
-  } catch (error) {
-    console.error('❌ MongoDB connection failed:', error.message);
-    process.exit(1);
+      mongoose.connection.on('error', (err) => {
+        console.error('❌ MongoDB connection error:', err.message);
+      });
+
+      mongoose.connection.on('disconnected', () => {
+        console.warn('⚠️  MongoDB disconnected. Attempting reconnect...');
+      });
+
+      return conn;
+    } catch (error) {
+      console.warn(`⚠️  MongoDB connection attempt ${attempts}/${maxRetries} failed: ${error.message}`);
+      if (attempts >= maxRetries) {
+        console.error('❌ MongoDB Atlas connection failed after all retries:', error.message);
+        process.exit(1);
+      }
+      console.log(`Retrying in ${retryDelayMs / 1000}s...`);
+      await new Promise((resolve) => setTimeout(resolve, retryDelayMs));
+    }
   }
 };
 

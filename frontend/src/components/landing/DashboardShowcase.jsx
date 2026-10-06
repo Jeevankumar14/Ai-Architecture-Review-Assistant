@@ -118,9 +118,8 @@ function ArchitectureTab() {
     { label: 'Security', value: 92, color: 'bg-emerald-500' },
     { label: 'Scalability', value: 91, color: 'bg-violet-500' },
     { label: 'Performance', value: 87, color: 'bg-amber-500' },
-    { label: 'Maintainability', value: 88, color: 'bg-rose-500' },
     { label: 'Cost Optimization', value: 85, color: 'bg-cyan-500' },
-    { label: 'Reliability', value: 90, color: 'bg-blue-500' },
+    { label: 'Maintainability', value: 88, color: 'bg-rose-500' },
   ];
 
   return (

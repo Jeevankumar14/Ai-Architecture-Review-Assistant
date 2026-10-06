@@ -32,7 +32,7 @@ export default function FinalCTA() {
           <p className="mt-5 text-lg leading-relaxed text-slate-600">
             Start catching architecture issues before they reach production.
             Upload your first document and get a comprehensive review in
-            minutes.
+            seconds.
           </p>
 
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">

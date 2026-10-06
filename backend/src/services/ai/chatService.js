@@ -62,7 +62,7 @@ class ChatService {
       stream: true,
     };
 
-    const stream = await client.chat.completions.create(payload, { timeout: 8000 });
+    const stream = await client.chat.completions.create(payload, { timeout: 4000 });
     for await (const chunk of stream) {
       const content = chunk.choices[0]?.delta?.content || '';
       if (content) {

@@ -18,28 +18,29 @@ class ReviewService {
     try {
       const startTime = Date.now();
       let response;
-      let usedModel = 'gemini-3.0-flash';
+      const primaryModel = env.architectureReviewModel || 'gemini-2.5-flash';
+      let usedModel = primaryModel;
       
       try {
         response = await ai.models.generateContent({
-          model: 'gemini-3.0-flash',
+          model: primaryModel,
           contents,
           config: {
             systemInstruction: systemPrompt,
-            temperature: 0.2,
+            temperature: 0.0,
             maxOutputTokens: maxTokens,
             responseMimeType: 'application/json',
           }
         });
       } catch (err) {
-        logger.warn('Gemini 3.0 Flash failed, falling back to gemini-2.5-flash', { error: err.message });
+        logger.warn(`Primary model ${primaryModel} failed, falling back to gemini-2.5-flash`, { error: err.message });
         usedModel = 'gemini-2.5-flash';
         response = await ai.models.generateContent({
           model: 'gemini-2.5-flash',
           contents,
           config: {
             systemInstruction: systemPrompt,
-            temperature: 0.2,
+            temperature: 0.0,
             maxOutputTokens: maxTokens,
             responseMimeType: 'application/json',
           }
@@ -53,8 +54,10 @@ class ReviewService {
         elapsed: `${elapsed}ms`,
       });
 
+      const responseText = typeof response.text === 'function' ? await response.text() : response.text;
+
       return {
-        content: response.text,
+        content: responseText,
         usage: {
           input_tokens: response.usageMetadata?.promptTokenCount,
           output_tokens: response.usageMetadata?.candidatesTokenCount

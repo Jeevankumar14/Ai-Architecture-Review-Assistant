@@ -15,7 +15,7 @@ const technologies = [
     name: 'Amazon S3',
     icon: HardDrive,
     description:
-      'Secure document storage with encryption at rest and in transit',
+      'Secure document storage with automated cascading cleanup',
     gradient: 'from-orange-400 to-amber-500',
     bgLight: 'bg-orange-50',
   },
@@ -23,22 +23,22 @@ const technologies = [
     name: 'Vector Search',
     icon: Search,
     description:
-      'MongoDB Atlas Vector Search for semantic document matching',
+      'MongoDB Atlas Vector Search for deep architectural chunk retrieval',
     gradient: 'from-emerald-400 to-teal-500',
     bgLight: 'bg-emerald-50',
   },
   {
-    name: 'Gemini 2.5',
+    name: 'Gemini 2.5 Flash',
     icon: Sparkles,
     description:
-      'Google DeepMind advanced reasoning for architecture analysis',
+      'Fast multimodal reasoning for instant scorecard and findings generation',
     gradient: 'from-blue-400 to-indigo-500',
     bgLight: 'bg-blue-50',
   },
   {
-    name: 'Groq Llama 3.3',
+    name: 'Llama 3.3 70B',
     icon: Cpu,
-    description: 'Ultra-fast inference for real-time processing',
+    description: 'High-performance conversational RAG copilot with cited context',
     gradient: 'from-violet-400 to-purple-500',
     bgLight: 'bg-violet-50',
   },
@@ -62,15 +62,15 @@ const technologies = [
     name: 'Rule Engine',
     icon: Settings,
     description:
-      'Configurable rule sets for custom architecture standards',
+      'Deterministic rule engine across 5 architecture pillars',
     gradient: 'from-slate-400 to-gray-500',
     bgLight: 'bg-slate-100',
   },
   {
-    name: 'BGE Embeddings',
+    name: 'Cohere v4.0 Embeddings',
     icon: Binary,
     description:
-      'State-of-the-art text embeddings for semantic understanding',
+      'Dense 1024-dimensional semantic embeddings and neural reranking',
     gradient: 'from-rose-400 to-pink-500',
     bgLight: 'bg-rose-50',
   },

@@ -17,31 +17,31 @@ const steps = [
   {
     num: "03",
     title: "Vector Search",
-    desc: "Semantic matching runs against thousands of known architecture best practices.",
+    desc: "MongoDB Atlas Vector Search with 1024-d Cohere embeddings retrieves relevant architecture context.",
     icon: Search,
   },
   {
     num: "04",
     title: "Rule Engine",
-    desc: "Automated deterministic validation against 200+ hard-coded cloud and security rules.",
+    desc: "Deterministic rules evaluate cloud security, scalability, resilience, and API rate limiting.",
     icon: Settings,
   },
   {
     num: "05",
     title: "Deep Review",
-    desc: "Advanced reasoning via Gemini 2.5 and Llama evaluates trade-offs and risks.",
+    desc: "Advanced reasoning via Gemini 2.5 Flash and Llama 3.3 evaluates trade-offs and architectural risks.",
     icon: Sparkles,
   },
   {
     num: "06",
     title: "Scoring Report",
-    desc: "A comprehensive dashboard with 6 dimensional scores, critical risks, and solutions.",
+    desc: "A comprehensive dashboard with 5 core architectural pillars, critical risks, and solutions.",
     icon: FileText,
   },
   {
     num: "07",
     title: "Context Chat",
-    desc: "An interactive AI copilot ready to rewrite code or answer follow-up questions.",
+    desc: "An interactive RAG copilot with full context and source citations ready to answer technical queries.",
     icon: MessageSquare,
   }
 ];
@@ -69,7 +69,7 @@ export default function HowItWorksSection() {
             transition={{ delay: 0.1 }}
             className="text-lg text-slate-400"
           >
-            The entire pipeline executes in under three minutes.
+            Fast path delivers full architecture reviews in seconds, with deep vector indexing in the background.
           </motion.p>
         </div>
 

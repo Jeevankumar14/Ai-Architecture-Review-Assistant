@@ -15,6 +15,7 @@ const findingSchema = new mongoose.Schema(
     },
     explanation: { type: String, required: true },
     recommendation: { type: String, required: true },
+    evidence: [{ type: String, trim: true }],
   },
   { _id: false }
 );
@@ -72,6 +73,8 @@ const reviewSchema = new mongoose.Schema(
         rule: String,
         status: { type: String, enum: ['Pass', 'Fail'] },
         explanation: String,
+        category: String,
+        severity: String,
       },
     ],
     criticalRisks: [String],
@@ -88,7 +91,15 @@ const reviewSchema = new mongoose.Schema(
       enum: ['generating', 'completed', 'failed'],
       default: 'generating',
     },
+    fileHash: {
+      type: String,
+      index: true,
+    },
     generationTime: Number, // milliseconds
+    timing: {
+      type: mongoose.Schema.Types.Mixed,
+      default: {},
+    },
     tokensUsed: Number,
     generatedBy: {
       type: String,

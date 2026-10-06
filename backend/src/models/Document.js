@@ -42,6 +42,15 @@ const documentSchema = new mongoose.Schema(
       enum: ['uploaded', 'processing', 'processed', 'failed'],
       default: 'uploaded',
     },
+    fileHash: {
+      type: String,
+      index: true,
+    },
+    ragReady: {
+      type: Boolean,
+      default: false,
+      index: true,
+    },
     extractedText: {
       type: String,
       select: false, // Large field, only load when needed

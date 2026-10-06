@@ -15,7 +15,7 @@ const HeroSection = () => {
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="flex flex-col items-start justify-center"
           >
-            <h1 className="text-5xl md:text-7xl font-bold tracking-tighter leading-[1.1] text-slate-900 mb-6">
+            <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold tracking-tighter leading-[1.1] text-slate-900 mb-6">
               Automate Your <br />Architecture Reviews
             </h1>
             <p className="text-lg text-slate-600 max-w-[28rem] mb-10 leading-relaxed font-medium">

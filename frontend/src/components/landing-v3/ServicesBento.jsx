@@ -123,7 +123,7 @@ const ServicesBento = () => {
           >
             <div className="mb-8 z-10">
               <h3 className="text-2xl font-bold text-white mb-3">Automated review</h3>
-              <p className="text-white/60">Upload project reports or architecture diagrams (JSON, YAML, Terraform, draw.io) and let our AI handle the heavy lifting of compliance and security verification.</p>
+              <p className="text-white/60">Upload project reports or architecture specs (PDF, DOCX, TXT, JSON, YAML, diagrams) and let our AI handle the heavy lifting of compliance and architecture verification.</p>
             </div>
             
             {/* UI Mockup */}
@@ -154,7 +154,7 @@ const ServicesBento = () => {
                     <span className="text-white/60">Performance</span><span className="text-yellow-400 font-mono">88</span>
                   </motion.div>
                   <motion.div variants={innerItemVariant} className="bg-[#111] border border-white/5 rounded-md p-2 flex justify-between">
-                    <span className="text-white/60">Reliability</span><span className="text-green-400 font-mono">92</span>
+                    <span className="text-white/60">Cost</span><span className="text-green-400 font-mono">92</span>
                   </motion.div>
                 </div>
               </motion.div>
@@ -231,7 +231,7 @@ const ServicesBento = () => {
             <div className="md:w-1/2 z-10">
               <h3 className="text-3xl font-bold text-white mb-4">Ai chat assistant</h3>
               <p className="text-white/60 text-lg mb-6">
-                Get instant feedback on your architectural decisions. Our AI assistant helps you resolve complex scalability bottlenecks before they hit production.
+                Get instant feedback on your architectural decisions. Our RAG-powered AI assistant retrieves cited document context to help you resolve complex scalability and security bottlenecks.
               </p>
               <motion.ul
                 variants={innerStaggerContainer}

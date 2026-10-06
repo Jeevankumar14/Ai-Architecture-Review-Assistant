@@ -4,7 +4,7 @@ import ReactMarkdown from 'react-markdown';
 import api from '../lib/api';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/card';
-import { ArrowLeft, MessageSquare, Loader2, FileText, CheckCircle2, AlertCircle, RefreshCw, Layers, Download, Printer } from 'lucide-react';
+import { ArrowLeft, MessageSquare, Loader2, FileText, CheckCircle2, AlertCircle, RefreshCw, Layers, Download, Printer, Trash2, Plus } from 'lucide-react';
 import { useReactToPrint } from 'react-to-print';
 
 export default function ProjectDetails() {
@@ -17,6 +17,7 @@ export default function ProjectDetails() {
   const [review, setReview] = useState(null);
   const [chatSession, setChatSession] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     fetchProjectData();
@@ -36,7 +37,7 @@ export default function ProjectDetails() {
         api.get(`/projects/${id}/documents`),
         api.get(`/projects/${id}/reviews/latest`).catch(() => ({ data: { data: { review: null } } })),
         api.get(`/chat/sessions`).then(res => ({
-          data: { data: { session: res.data.data.sessions.find(s => s.projectId._id === id) } }
+          data: { data: { session: (res.data?.data?.sessions || []).find(s => (s.projectId?._id || s.projectId) === id) } }
         })).catch(() => ({ data: { data: { session: null } } }))
       ]);
 
@@ -76,8 +77,9 @@ export default function ProjectDetails() {
       } else {
         const overallStatus = docsRes.data.data.overallStatus;
         if (overallStatus !== 'processing' && !rev) {
-          // Docs finished but review not started (shouldn't happen with orchestrator, but just in case)
-          setProcessingStatus(overallStatus);
+          // Documents are done, but the review has not appeared yet.
+          // Keep polling instead of showing an empty state too early.
+          setProcessingStatus('processing');
         }
       }
     } catch (error) {
@@ -88,13 +90,45 @@ export default function ProjectDetails() {
   const checkDocStatus = (docs) => {
     const allProcessed = docs.every(d => d.status === 'processed' || d.status === 'failed');
     if (allProcessed && !review) {
-      setProcessingStatus(docs.some(d => d.status === 'failed') ? 'completed_with_errors' : 'completed');
+      // The review is often created immediately after document processing.
+      // Stay in the processing view until the review record is actually available.
+      setProcessingStatus('processing');
     }
   };
 
   const handleOpenChat = () => {
     if (chatSession) {
       navigate(`/projects/${id}/chat`);
+    }
+  };
+
+  const handleDeleteReview = async () => {
+    if (!review?._id) return;
+    const confirmMessage = 
+      'Are you sure you want to delete this architecture review?\n\n' +
+      'This will permanently delete:\n' +
+      '• The review analysis report and scores\n' +
+      '• All uploaded document files from storage\n' +
+      '• Vector embeddings from the database\n' +
+      '• Associated chat conversations and messages\n\n' +
+      'This action cannot be undone.';
+    
+    if (!window.confirm(confirmMessage)) {
+      return;
+    }
+
+    try {
+      setIsDeleting(true);
+      await api.delete(`/projects/reviews/${review._id}`);
+      setReview(null);
+      setDocuments([]);
+      setChatSession(null);
+      setProcessingStatus('empty');
+    } catch (error) {
+      console.error('Failed to delete review', error);
+      alert(error.response?.data?.error || 'Failed to delete review. Please try again.');
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -118,7 +152,15 @@ export default function ProjectDetails() {
   }
 
   if (!project) {
-    return <div>Project not found</div>;
+    return (
+      <div className="flex flex-col items-center justify-center p-12 text-center">
+        <h2 className="text-xl font-semibold mb-2">Project not found</h2>
+        <p className="text-muted-foreground mb-4">This project may have been deleted or the URL is invalid.</p>
+        <Button asChild>
+          <Link to="/">Back to Dashboard</Link>
+        </Button>
+      </div>
+    );
   }
 
   return (
@@ -149,23 +191,29 @@ export default function ProjectDetails() {
             <CardDescription>Uploaded reference material</CardDescription>
           </CardHeader>
           <CardContent>
-            <ul className="space-y-3">
-              {documents.map((doc) => (
-                <li key={doc._id} className="flex items-start justify-between text-sm p-2 border rounded bg-muted/30">
-                  <div className="flex items-center gap-2 overflow-hidden">
-                    <FileText className="h-4 w-4 text-primary shrink-0" />
-                    <span className="truncate">{doc.fileName}</span>
-                  </div>
-                  {doc.status === 'processed' ? (
-                    <CheckCircle2 className="h-4 w-4 text-green-500 shrink-0" title="Processed" />
-                  ) : doc.status === 'failed' ? (
-                    <AlertCircle className="h-4 w-4 text-destructive shrink-0" title={doc.processingError} />
-                  ) : (
-                    <Loader2 className="h-4 w-4 text-muted-foreground animate-spin shrink-0" title="Processing" />
-                  )}
-                </li>
-              ))}
-            </ul>
+            {documents.length > 0 ? (
+              <ul className="space-y-3">
+                {documents.map((doc) => (
+                  <li key={doc._id} className="flex items-start justify-between text-sm p-2 border rounded bg-muted/30">
+                    <div className="flex items-center gap-2 overflow-hidden">
+                      <FileText className="h-4 w-4 text-primary shrink-0" />
+                      <span className="truncate">{doc.fileName}</span>
+                    </div>
+                    {doc.status === 'processed' ? (
+                      <CheckCircle2 className="h-4 w-4 text-green-500 shrink-0" title="Processed" />
+                    ) : doc.status === 'failed' ? (
+                      <AlertCircle className="h-4 w-4 text-destructive shrink-0" title={doc.processingError} />
+                    ) : (
+                      <Loader2 className="h-4 w-4 text-muted-foreground animate-spin shrink-0" title="Processing" />
+                    )}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div className="text-center py-6 text-sm text-muted-foreground">
+                <p>No documents attached.</p>
+              </div>
+            )}
           </CardContent>
         </Card>
 
@@ -188,14 +236,43 @@ export default function ProjectDetails() {
             <div className="flex flex-col items-center justify-center p-12 text-center text-destructive h-full">
               <AlertCircle className="h-12 w-12 mb-4" />
               <h3 className="text-xl font-semibold mb-2">Analysis Failed</h3>
-              <p className="max-w-md">{review?.executiveSummary || 'An error occurred during processing.'}</p>
+              <p className="max-w-md mb-6">{review?.executiveSummary || 'An error occurred during processing.'}</p>
+              {review?._id && (
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={handleDeleteReview}
+                  disabled={isDeleting}
+                >
+                  {isDeleting ? (
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  ) : (
+                    <Trash2 className="h-4 w-4 mr-2" />
+                  )}
+                  Delete Failed Review & Storage
+                </Button>
+              )}
             </div>
           ) : review ? (
             <>
-              <div className="flex justify-end p-4 border-b bg-muted/5">
+              <div className="flex justify-end gap-2 p-4 border-b bg-muted/5">
                 <Button variant="outline" size="sm" onClick={() => handleDownloadPdf()}>
                   <Printer className="h-4 w-4 mr-2" />
                   Print / Save as PDF
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200 dark:border-red-900/50"
+                  onClick={handleDeleteReview}
+                  disabled={isDeleting}
+                >
+                  {isDeleting ? (
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  ) : (
+                    <Trash2 className="h-4 w-4 mr-2" />
+                  )}
+                  Delete Review
                 </Button>
               </div>
               <div id="architecture-report" ref={reportRef} className="print:p-8">
@@ -293,8 +370,24 @@ export default function ProjectDetails() {
               </div>
             </>
           ) : (
-            <div className="flex flex-col items-center justify-center p-12 text-center h-full">
-              <p>No review available.</p>
+            <div className="flex flex-col items-center justify-center p-12 text-center h-full min-h-[350px]">
+              <div className="p-4 rounded-full bg-slate-100 dark:bg-slate-800 mb-4">
+                <Layers className="h-8 w-8 text-slate-400" />
+              </div>
+              <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-2">No Active Review</h3>
+              <p className="text-sm text-muted-foreground max-w-md mb-6">
+                The architecture review and associated files for this project have been removed to eliminate storage wastage. You can create a new review project or return to the dashboard.
+              </p>
+              <div className="flex items-center gap-3">
+                <Button asChild>
+                  <Link to="/projects/new">
+                    <Plus className="h-4 w-4 mr-2" /> Create New Review
+                  </Link>
+                </Button>
+                <Button variant="outline" asChild>
+                  <Link to="/">Dashboard</Link>
+                </Button>
+              </div>
             </div>
           )}
         </Card>

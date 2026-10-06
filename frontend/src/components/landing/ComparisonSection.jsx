@@ -5,17 +5,17 @@ const comparisons = [
   {
     dimension: 'Timeline',
     traditional: 'Days to weeks',
-    ai: 'Minutes',
+    ai: 'Seconds (Fast Path)',
   },
   {
     dimension: 'Consistency',
     traditional: 'Varies by reviewer',
-    ai: 'Standardized 200+ rules',
+    ai: 'Standardized deterministic rules + AI heuristics',
   },
   {
     dimension: 'Coverage',
     traditional: 'Limited to reviewer expertise',
-    ai: '6 architecture dimensions',
+    ai: '5 core architecture pillars',
   },
   {
     dimension: 'Cost',
@@ -25,12 +25,12 @@ const comparisons = [
   {
     dimension: 'Knowledge Base',
     traditional: 'Individual experience',
-    ai: 'AWS Well-Architected + OWASP + industry standards',
+    ai: 'AWS Well-Architected + OWASP + curated knowledge base',
   },
   {
     dimension: 'Follow-up',
     traditional: 'Schedule another meeting',
-    ai: 'Instant AI chat with full context',
+    ai: 'Instant RAG AI chat with document citations',
   },
   {
     dimension: 'Documentation',

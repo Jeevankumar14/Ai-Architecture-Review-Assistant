@@ -82,7 +82,7 @@ export default function FeatureGrid() {
             <div className="mt-8 relative z-10">
               <h3 className="text-2xl font-bold text-white mb-2 tracking-tight">Full-Context Review</h3>
               <p className="text-slate-400 leading-relaxed max-w-sm">
-                Our engine ingests your SRS, HLD, and APIs simultaneously, cross-referencing every architectural decision.
+                Our engine ingests your SRS, HLD, and APIs simultaneously, cross-referencing decisions across 5 core architecture pillars.
               </p>
             </div>
           </GlowCard>
@@ -124,7 +124,7 @@ export default function FeatureGrid() {
             </div>
             <h3 className="text-2xl font-bold text-white mb-2 tracking-tight">Dimensional Scoring</h3>
             <p className="text-slate-400 leading-relaxed text-sm">
-              Strict quantitative health index across 6 dimensions.
+              Strict quantitative health index across 5 core pillars plus overall score.
             </p>
           </GlowCard>
 
@@ -171,7 +171,7 @@ export default function FeatureGrid() {
             <div className="mt-8 relative z-10">
               <h3 className="text-2xl font-bold text-white mb-2 tracking-tight">Context-Aware AI Chat</h3>
               <p className="text-slate-400 leading-relaxed max-w-sm">
-                Drop into an interactive chat session with full context of your architecture to evaluate alternative trade-offs.
+                Drop into an interactive RAG chat session with cited architectural context to evaluate trade-offs and implementation details.
               </p>
             </div>
           </GlowCard>

@@ -18,7 +18,7 @@ export default function LandingDemo() {
     document.title = 'ArchReview AI — AI-Powered Architecture Intelligence Platform';
     const meta = document.querySelector('meta[name="description"]');
     if (meta) {
-      meta.setAttribute('content', 'Automatically review software architecture documents with AI. Get comprehensive scores across security, performance, scalability, cost, and maintainability in minutes.');
+      meta.setAttribute('content', 'Automatically review software architecture documents with AI. Get comprehensive scores across security, scalability, performance, cost, and maintainability in seconds.');
     }
   }, []);
 

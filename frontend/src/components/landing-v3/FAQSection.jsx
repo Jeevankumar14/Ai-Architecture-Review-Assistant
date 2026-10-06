@@ -5,15 +5,15 @@ import { Plus, Minus } from 'lucide-react';
 const faqs = [
   {
     question: "What architecture file formats do you support?",
-    answer: "We support a wide variety of formats including JSON, YAML, Terraform configurations, and draw.io diagrams. Our OCR engine can also parse standard image-based architecture diagrams."
+    answer: "We support PDF, DOCX, TXT, JSON, YAML, and architecture diagram images. Our OCR engine and parsers extract text and structure for comprehensive analysis."
   },
   {
     question: "How is the architecture score calculated?",
-    answer: "The score is a weighted average across 5 key pillars: Security, Scalability, Performance, Reliability, and Maintainability. It is strictly grounded in the AWS Well-Architected Framework and OWASP standards."
+    answer: "The score is evaluated across 5 key pillars: Security, Scalability, Performance, Cost, and Maintainability (plus overall health score). It is strictly grounded in deterministic rules, the AWS Well-Architected Framework, and OWASP standards."
   },
   {
     question: "Is my architecture data secure?",
-    answer: "Absolutely. All uploaded documents are encrypted in transit and at rest using Amazon S3. We do not use your proprietary architecture designs to train our core AI models."
+    answer: "Absolutely. All uploaded documents are stored in Amazon S3 and processed in isolated environments. When you delete a review or project, all uploaded files, vector embeddings, and chat histories are permanently purged to eliminate storage waste."
   },
   {
     question: "Can I integrate this with my CI/CD pipeline?",
@@ -21,7 +21,7 @@ const faqs = [
   },
   {
     question: "What AI models power the analysis?",
-    answer: "We use a hybrid approach combining MongoDB Atlas Vector Search for semantic retrieval, Google Gemini 2.5 Flash for deep structural analysis, and Groq Llama 3.3 for lightning-fast interactive chat sessions."
+    answer: "We use a hybrid dual-path architecture combining deterministic rule verification, Google Gemini 2.5 Flash for rapid review generation, Cohere v4.0 (1024-d) embeddings in MongoDB Atlas Vector Search, and OpenRouter Llama 3.3 70B with Cohere reranking for cited interactive chat."
   }
 ];
 

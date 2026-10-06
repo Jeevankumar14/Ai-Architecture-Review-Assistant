@@ -16,12 +16,12 @@ const faqs = [
   {
     question: 'What about data privacy?',
     answer:
-      'Your architecture documents are processed in isolated environments and never used for model training. Data is automatically purged after your configured retention period. We are SOC 2 Type II compliant.',
+      'Your architecture documents are processed in isolated environments and never used for model training. When you delete a review or project, all uploaded files, vector embeddings, and chat histories are permanently purged from AWS S3 and MongoDB to eliminate storage waste.',
   },
   {
     question: 'Which AI models are used?',
     answer:
-      'We use Google Gemini 2.5 Flash for deep architecture reasoning and Groq-hosted Llama 3.3 70B for fast inference. BGE-large-en-v1.5 embeddings power our vector search for semantic document matching.',
+      'We use Google Gemini 2.5 Flash for rapid review synthesis and OpenRouter Llama 3.3 70B Instruct for conversational Q&A. Cohere embed-v4.0 (1024-dimension) and Cohere rerank-v3.5 power our vector search and semantic document retrieval.',
   },
   {
     question: 'Can this be deployed on-premise?',

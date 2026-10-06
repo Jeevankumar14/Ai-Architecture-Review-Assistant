@@ -49,11 +49,14 @@ const env = {
   bedrockTitanModelId: process.env.BEDROCK_TITAN_MODEL_ID || 'amazon.titan-embed-text-v2:0',
   bedrockTitanDimensions: parseInt(process.env.BEDROCK_TITAN_DIMENSIONS, 10) || 1024,
 
-  // AI Providers
+  // AI Providers (Gemini is primary; Groq is optional for chat; Cohere for cloud embeddings)
   geminiApiKey: process.env.GEMINI_API_KEY,
   groqApiKey: process.env.GROQ_API_KEY,
+  cohereApiKey: process.env.COHERE_API_KEY,
+  cohereEmbeddingModel: process.env.COHERE_EMBEDDING_MODEL || 'embed-v4.0',
+  cohereEmbeddingDimension: 1024,
   chatModel: process.env.CHAT_MODEL || 'openai/gpt-oss-120b',
-  extractionModel: process.env.EXTRACTION_MODEL || 'qwen/qwen3-next-80b-a3b-instruct:free',
+  extractionModel: process.env.EXTRACTION_MODEL || 'gemini-2.5-flash',
   architectureReviewModel: process.env.ARCH_REVIEW_MODEL || 'gemini-2.5-flash',
 
   // Email
@@ -65,6 +68,9 @@ const env = {
 
   // Client
   clientUrl: process.env.CLIENT_URL || 'http://localhost:5173',
+
+  // Redis & Queue (optional, falls back to in-memory)
+  redisUrl: process.env.REDIS_URL || null,
 };
 
 export default env;

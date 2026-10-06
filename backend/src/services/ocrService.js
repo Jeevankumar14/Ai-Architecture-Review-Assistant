@@ -11,10 +11,10 @@ class OcrService {
     try {
       logger.info('Starting OCR processing with Gemini 2.5 Flash');
       
-      // Convert to normalized format and optimize size
+      // Convert to normalized format and optimize size for fast network transit
       const normalizedBuffer = await sharp(buffer)
-        .png()
-        .resize({ width: 1600, withoutEnlargement: true })
+        .jpeg({ quality: 85 })
+        .resize({ width: 1400, withoutEnlargement: true })
         .toBuffer();
 
       const ai = getGeminiClient();
@@ -25,15 +25,17 @@ class OcrService {
           role: 'user',
           parts: [
             { text: 'Extract all the text, labels, and architectural components from this diagram. Return ONLY the extracted text in a clean, structured format. Do not use markdown blocks.' },
-            { inlineData: { data: normalizedBuffer.toString('base64'), mimeType: 'image/png' } }
+            { inlineData: { data: normalizedBuffer.toString('base64'), mimeType: 'image/jpeg' } }
           ]
         }]
       });
 
       logger.info('OCR processing completed successfully via Gemini');
 
+      const responseText = typeof response.text === 'function' ? await response.text() : response.text;
+
       return {
-        text: response.text.trim(),
+        text: (responseText || '').trim(),
         boxes: [] // Bounding boxes are not easily returned by standard Gemini text output
       };
     } catch (error) {

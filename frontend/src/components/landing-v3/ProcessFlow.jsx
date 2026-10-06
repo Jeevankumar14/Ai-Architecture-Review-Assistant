@@ -36,8 +36,8 @@ const ProcessFlow = () => {
     {
       id: 2,
       title: "Vector Processing",
-      tech: "BGE Embeddings → MongoDB Atlas",
-      description: "Architecture is parsed, chunked, and embedded into a vector database for lightning-fast hybrid retrieval.",
+      tech: "Cohere v4.0 Embeddings → MongoDB Atlas",
+      description: "Architecture is parsed, chunked, and embedded into MongoDB Atlas Vector Search via background worker for hybrid retrieval.",
       icon: <Database className="w-6 h-6 text-indigo-400" />,
       color: "from-indigo-500/20 to-indigo-500/5",
       borderColor: "border-indigo-500/20"
@@ -55,7 +55,7 @@ const ProcessFlow = () => {
       id: 4,
       title: "Intelligent Analysis",
       tech: "Rule Engine → Gemini 2.5 Flash",
-      description: "Retrieved context passes through our rule engine to Google Gemini for a comprehensive architecture review.",
+      description: "Deterministic rules evaluate 5 pillars, synthesized by Gemini 2.5 Flash into comprehensive scorecards and findings.",
       icon: <Cpu className="w-6 h-6 text-blue-400" />,
       color: "from-blue-500/20 to-blue-500/5",
       borderColor: "border-blue-500/20"
@@ -63,8 +63,8 @@ const ProcessFlow = () => {
     {
       id: 5,
       title: "Interactive Follow-up",
-      tech: "Chat Session → Groq Llama 3.3",
-      description: "Discuss the review instantly. Groq's ultra-fast inference powers real-time chat based on your architecture.",
+      tech: "RAG Copilot → Llama 3.3 70B",
+      description: "Discuss the review instantly. High-performance inference with Cohere reranking powers cited RAG architectural chat.",
       icon: <MessageSquare className="w-6 h-6 text-emerald-400" />,
       color: "from-emerald-500/20 to-emerald-500/5",
       borderColor: "border-emerald-500/20"

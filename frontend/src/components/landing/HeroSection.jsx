@@ -155,7 +155,7 @@ export default function HeroSection() {
               className="mt-6 text-lg leading-relaxed text-slate-600"
             >
               Upload your SRS, HLD, or API specs and get a comprehensive architecture review in
-              minutes. AI-powered analysis across security, performance, scalability, cost, and
+              seconds. Fast-path AI evaluation across security, scalability, performance, cost, and
               maintainability.
             </motion.p>
 

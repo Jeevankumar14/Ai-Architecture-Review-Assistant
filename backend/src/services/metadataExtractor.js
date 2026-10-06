@@ -1,4 +1,5 @@
 import extractionService from './ai/extractionService.js';
+import guardrailService from './guardrailService.js';
 import logger from '../utils/logger.js';
 
 class MetadataExtractor {
@@ -21,7 +22,7 @@ Return ONLY a JSON object with the following keys:
       // Use the first 8000 characters to save tokens for metadata
       const textSample = text.slice(0, 8000);
       const response = await extractionService.extractData(textSample, systemPrompt);
-      return JSON.parse(response.content);
+      return guardrailService.safeParseJson(response.content);
     } catch (error) {
       logger.error('Metadata extraction failed', { error: error.message });
       return {};

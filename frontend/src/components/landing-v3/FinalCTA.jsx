@@ -37,7 +37,7 @@ const FinalCTA = () => {
             transition={{ duration: 0.7, delay: 0.35, ease: premiumEase }}
             viewport={{ once: true, amount: 0.2 }}
           >
-            Transform your architecture review process today in under 5 minutes
+            Transform your architecture review process today with fast-path reviews in seconds.
           </motion.p>
           
           <motion.button

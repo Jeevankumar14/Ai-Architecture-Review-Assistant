@@ -169,7 +169,7 @@ export default function ScoreAnalysis() {
           </h2>
           <p className="mt-4 text-lg text-slate-500 max-w-2xl mx-auto leading-relaxed">
             Every review generates detailed scores with animated visualizations
-            across 6 key dimensions.
+            across 5 core architectural pillars and overall health.
           </p>
         </motion.div>
 

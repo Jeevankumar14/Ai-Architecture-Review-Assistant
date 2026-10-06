@@ -172,12 +172,12 @@ const HeroSection = () => {
         {/* Pill badge */}
         <motion.div
           variants={fadeUp}
-          className="flex items-center gap-2 bg-[#111111] border border-white/10 rounded-full px-3 py-1.5 mb-6"
+          className="flex items-center gap-2 bg-[#111111] border border-white/10 rounded-full px-3 py-1.5 mb-4 sm:mb-6"
         >
           <span className="bg-purple-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
             New
           </span>
-          <span className="text-white/80 text-sm font-medium flex items-center gap-1.5">
+          <span className="text-white/80 text-xs sm:text-sm font-medium flex items-center gap-1.5">
             Automated Architecture Review{' '}
             <Sparkles className="w-3.5 h-3.5 text-purple-400" />
           </span>
@@ -186,9 +186,9 @@ const HeroSection = () => {
         {/* Headline */}
         <motion.h1
           variants={fadeUp}
-          className="text-4xl sm:text-5xl md:text-7xl font-bold text-white leading-[1.05] mb-5 tracking-tight drop-shadow-xl max-w-[92vw] sm:max-w-none"
+          className="text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.18] sm:leading-[1.05] mb-4 sm:mb-5 tracking-tight drop-shadow-xl max-w-full sm:max-w-none"
         >
-          <span className="whitespace-nowrap">Intelligent Architecture</span>{' '}
+          <span className="sm:whitespace-nowrap">Intelligent Architecture</span>{' '}
           <br className="hidden md:block" />
           Review for Modern{' '}
           <br className="hidden md:block" />
@@ -198,21 +198,20 @@ const HeroSection = () => {
         {/* Subtext */}
         <motion.p
           variants={fadeUp}
-          className="text-base md:text-xl text-white/80 max-w-2xl mb-8 drop-shadow-md"
+          className="text-sm sm:text-base md:text-xl text-white/80 max-w-2xl mb-6 sm:mb-8 drop-shadow-md px-2 sm:px-0 leading-relaxed"
         >
-          ArchReview validates architecture decisions, surfaces risk early, and
-          helps teams ship with more confidence.
+          ArchReview evaluates system designs across 5 core pillars—Security, Scalability, Performance, Cost, and Maintainability—surfacing critical risks in seconds.
         </motion.p>
 
         {/* Buttons */}
         <motion.div
           variants={fadeUp}
-          className="flex flex-col sm:flex-row items-center gap-4 w-full justify-center"
+          className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 w-full justify-center px-4 sm:px-0"
         >
-          <button onClick={() => navigate('/register')} className="w-full sm:w-auto bg-purple-600 hover:bg-purple-700 text-white px-8 py-3.5 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20">
+          <button onClick={() => navigate('/register')} className="w-full sm:w-auto bg-purple-600 hover:bg-purple-700 text-white px-6 sm:px-8 py-3 sm:py-3.5 rounded-lg text-sm sm:text-base font-medium transition-colors flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20">
             Get started <ArrowRight className="w-4 h-4" />
           </button>
-          <button className="w-full sm:w-auto bg-transparent hover:bg-white/5 border border-transparent hover:border-white/10 text-white px-8 py-3.5 rounded-lg font-medium transition-all">
+          <button className="w-full sm:w-auto bg-transparent hover:bg-white/5 border border-transparent hover:border-white/10 text-white px-6 sm:px-8 py-3 sm:py-3.5 rounded-lg text-sm sm:text-base font-medium transition-all">
             View demo
           </button>
         </motion.div>

@@ -1,29 +1,62 @@
-import extractionService from './ai/extractionService.js';
+import architectureExtractor from './architectureExtractor.js';
 import logger from '../utils/logger.js';
 
 class DiagramProcessor {
   /**
-   * Uses Qwen 3 32B via Groq to extract structural component data from raw OCR text
+   * Deterministically processes OCR text into structured diagram data
+   * Uses rules, tech dictionaries, and regex patterns in < 10ms with zero LLM calls.
    */
   async processDiagramText(ocrText) {
-    logger.info('Processing OCR text into structured diagram data');
+    logger.info('Processing OCR text into structured diagram data (Deterministic)');
 
-    const systemPrompt = `You are an expert cloud architecture diagram parser.
-You will receive raw text extracted from an architecture diagram via OCR.
-Identify the main components, databases, and potential connections based on the text.
-Output a valid JSON object containing:
-- "components": array of strings (e.g. "API Gateway", "User Service")
-- "databases": array of strings (e.g. "PostgreSQL", "Redis")
-- "cloudProvider": string (e.g. "AWS", "Azure", "Unknown")`;
+    if (!ocrText || typeof ocrText !== 'string') {
+      return this._emptyData();
+    }
 
     try {
-      const response = await extractionService.extractData(ocrText, systemPrompt);
-      const data = JSON.parse(response.content);
-      return data;
+      const extracted = architectureExtractor.extractFromText(ocrText);
+      const components = [
+        ...extracted.databases,
+        ...extracted.caches,
+        ...extracted.queues,
+        ...extracted.loadBalancers,
+        ...extracted.gateways,
+        ...extracted.compute,
+        ...extracted.microservices,
+        ...extracted.storage,
+      ];
+
+      return {
+        components: [...new Set(components)],
+        microservices: extracted.microservices || [],
+        apis: extracted.apis || [],
+        databases: extracted.databases || [],
+        loadBalancers: extracted.loadBalancers || [],
+        cloudServices: extracted.storage || [],
+        externalSystems: [],
+        connections: (extracted.connections || []).map(c => c.directedString || `${c.source} -> ${c.target}`),
+        dependencies: (extracted.connections || []).filter(c => c.relationship === 'depends_on').map(c => `${c.source} depends on ${c.target}`),
+        cloudProvider: extracted.cloudProviders?.[0] || 'Unknown',
+      };
     } catch (error) {
       logger.error('Diagram processing failed', { error: error.message });
-      return { components: [], databases: [], cloudProvider: 'Unknown' };
+      return this._emptyData();
     }
+  }
+
+  _emptyData() {
+    return {
+      components: [],
+      microservices: [],
+      apis: [],
+      databases: [],
+      loadBalancers: [],
+      cloudServices: [],
+      externalSystems: [],
+      connections: [],
+      dependencies: [],
+      cloudProvider: 'Unknown',
+    };
   }
 }
 

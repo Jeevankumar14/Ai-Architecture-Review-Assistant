@@ -92,6 +92,15 @@ app.use('/api/settings', settingsRoutes);
 app.use(notFoundHandler);
 app.use(errorHandler);
 
+// ─── Process Error Handlers ──────────────────────────────────
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('⚠️  Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
+process.on('uncaughtException', (err) => {
+  console.error('❌ Uncaught Exception:', err);
+});
+
 // ─── Start Server ────────────────────────────────────────────
 const start = async () => {
   await connectDatabase();
