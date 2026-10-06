@@ -71,62 +71,9 @@ By decoupling **Immediate Review Generation (< 5-7s Fast Path)** from **Heavy Ba
 
 ## 🏗️ System Architecture
 
-<img width="1024" height="1536" alt="ArchitectureDiagram" src="https://github.com/user-attachments/assets/d7764b27-f1f2-4652-b83a-1090fb61c1e3" />
-
-
-
-```mermaid
-flowchart TB
-    subgraph UI ["Client Tier: React 19 + Vite"]
-        Dashboard["Project Dashboard & Radar Charts"]
-        ChatUI["Conversational Architecture Advisor"]
-    end
-
-    subgraph Ingestion ["Ingestion & Deduplication"]
-        Upload["Multer-S3: AWS S3"]
-        Hash["SHA-256 Content Hasher"]
-        CacheCheck{Cache Hit?}
-    end
-
-    subgraph FastPath ["Fast Review Path: Sub-7s"]
-        Parser["Doc & Vision Parser: PDF / DOCX / OCR"]
-        Extractor["Deterministic Architecture Extractor"]
-        Normalizer["Canonical Architecture Normalizer"]
-        Rules["Deterministic Rule Engine: 6 Checks"]
-        KB["Hybrid KB Search: Vector + BM25"]
-        Gemini["Gemini 2.5 Flash Reasoning"]
-        Scorer["5-Pillar Scoring Engine"]
-    end
-
-    subgraph WorkerTier ["Isolated Background Worker: worker.js"]
-        Queue["BullMQ / Redis Job Queue"]
-        Chunker["Semantic Document Chunker"]
-        Cohere["Cohere Cloud API: embed-v4.0 1024-dim"]
-        Atlas["MongoDB Atlas Vector Store"]
-    end
-
-    UI --> Upload
-    Upload --> Hash
-    Hash --> CacheCheck
-    CacheCheck -->|Instant Cached Review| Dashboard
-    CacheCheck -->|Fresh Document| Parser
-    Parser --> Extractor
-    Extractor --> Normalizer
-    Normalizer --> Rules
-    Normalizer --> KB
-    Rules --> Gemini
-    KB --> Gemini
-    Gemini --> Scorer
-    Scorer --> Dashboard
-
-    Parser -.->|Enqueue Non-Blocking Job| Queue
-    Queue --> Chunker
-    Chunker --> Cohere
-    Cohere --> Atlas
-
-    ChatUI -->|Dual Retrieval: Chunks + KB| Atlas
-    Atlas --> ChatUI
-```
+<p align="center">
+  <img width="1024" alt="ArchReview AI System Architecture" src="https://github.com/user-attachments/assets/d7764b27-f1f2-4652-b83a-1090fb61c1e3" />
+</p>
 
 ---
 
