@@ -71,6 +71,10 @@ By decoupling **Immediate Review Generation (< 5-7s Fast Path)** from **Heavy Ba
 
 ## 🏗️ System Architecture
 
+<img width="1024" height="1536" alt="ArchitectureDiagram" src="https://github.com/user-attachments/assets/d7764b27-f1f2-4652-b83a-1090fb61c1e3" />
+
+
+
 ```mermaid
 flowchart TB
     subgraph UI ["Client Tier (React 19 + Vite)"]
